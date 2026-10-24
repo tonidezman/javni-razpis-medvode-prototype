@@ -46,4 +46,4 @@ npm run preview  # preview the production build
 
 ## Implementation
 
-React + Vite, plain CSS, and Lucide icons. All state is in memory and resets on reload. No production hardening, backend validation, authentication, or automated tests are included by design.
+React + Vite, plain CSS, and Lucide icons. The blue visual theme uses the observed Občina Medvode palette (`#266AAB`, `#1797CB`, `#74C1E0`), documented in `DESIGN.md` and implemented in `src/theme-medvode.css`. All state is in memory and resets on reload. No production hardening, backend validation, authentication, or automated tests are included by design.

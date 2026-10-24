@@ -1,0 +1,336 @@
+/*
+ * Občina Medvode theme
+ * Observed at https://medvode.si/: #266AAB, #1797CB, #74C1E0.
+ * Derived navy and pale tints support the application shell and data-dense views.
+ */
+:root {
+  --medvode-primary: #266aab;
+  --medvode-accent: #1797cb;
+  --medvode-light: #74c1e0;
+  --medvode-navy: #1f4e79;
+  --medvode-navy-dark: #183e60;
+  --medvode-ink: #243d52;
+  --medvode-text: #38566c;
+  --medvode-muted: #718493;
+  --medvode-soft: #eaf4fb;
+  --medvode-soft-strong: #dceefa;
+  --medvode-soft-subtle: #f3f8fc;
+  --medvode-border: #dce8f1;
+  --ink: var(--medvode-ink);
+  --ink-2: var(--medvode-text);
+  --muted: var(--medvode-muted);
+  --muted-2: #93a4b0;
+  --line: #dfe8ef;
+  --line-dark: #ccdce8;
+  --canvas: #f4f7fa;
+  --primary: var(--medvode-primary);
+  --primary-dark: #1f588c;
+  --primary-deep: var(--medvode-navy);
+  --primary-soft: var(--medvode-soft);
+  --sidebar: var(--medvode-navy);
+  color: var(--medvode-ink);
+  background: var(--canvas);
+}
+
+::selection { color: var(--medvode-navy); background: #cce8f7; }
+:focus-visible { outline-color: rgba(23, 151, 203, .3); }
+body { color: var(--medvode-ink); background: var(--canvas); }
+
+/* Main navigation */
+.sidebar { background: linear-gradient(180deg, #255f96 0%, var(--medvode-navy) 38%, #1b456b 100%); }
+.brand__mark { color: var(--medvode-navy); box-shadow: inset 0 -4px 0 var(--medvode-light); }
+.sidebar__brand small,
+.sidebar__context span,
+.sidebar__nav-label { color: #a9d2e9; }
+.sidebar__context strong,
+.sidebar__user strong { color: #f2f8fc; }
+.prototype-label { color: #c1e2f2; border-color: rgba(116, 193, 224, .25); background: rgba(116, 193, 224, .07); }
+.sidebar__nav button,
+.sidebar__bottom > button { color: #c4dfed; }
+.sidebar__nav button:hover,
+.sidebar__bottom > button:hover,
+.sidebar__bottom > button.active { color: #fff; background: rgba(116, 193, 224, .11); }
+.sidebar__nav button.active { color: #1f588c; background: #f2f8fc; }
+.sidebar__nav button.active::before { background: var(--medvode-light); }
+.sidebar__nav button b { color: #d7eaf5; background: rgba(116, 193, 224, .13); }
+.sidebar__nav button.active b { color: #266aab; background: #dceefa; }
+.sidebar__support > span { color: var(--medvode-light); }
+.sidebar__support strong { color: #e4f1f8; }
+.sidebar__support p,
+.sidebar__user span:not(.avatar),
+.sidebar__user > svg { color: #a8cbdd; }
+.global-search { background: #f3f7fa !important; }
+.global-search:focus-within { border-color: #8fc9e4 !important; }
+.role-switch { background: #f0f5f9; border-color: #e3ecf2; }
+.role-switch button { color: #6c8190; }
+.role-switch button.active { color: #266aab; }
+.icon-button:hover { color: #266aab; background: #eaf4fb; }
+.notification-dot.info { color: #266aab; background: #eaf4fb; }
+.notifications-popover header button,
+.notifications-popover footer button { color: #1797cb; }
+.prototype-switcher { background: #1b354b; }
+.prototype-switcher > button { color: #bad9e9; }
+.prototype-switcher > div span { color: #8db9d0; }
+.prototype-switcher__hint { color: #7599af; }
+.toast { background: #1d4d73; }
+.toast > span { background: #1797cb; }
+.toast > button { color: #b5d5e5; }
+
+/* Typography, actions and shared controls */
+.page-header h1,
+.section-heading h2,
+.stat-card > strong,
+.application-row__main strong,
+.workflow-focus h2,
+.mini-summary--plain > strong,
+.call-card h2,
+.admin-call-card__identity h2,
+.criteria-panel__heading h2,
+.modal__header h2,
+.flow-section__heading h1,
+.submission-success > h1,
+.review-section h3,
+.detail-section__heading h3,
+.config-side h3,
+.integration-card h2,
+.submission-reference > strong,
+.finance-box__heading h3,
+.signature-box__heading h3,
+.checklist-panel > h3 { color: var(--medvode-ink); }
+.page-header p,
+.stat-card__label,
+.section-heading p { color: var(--medvode-muted); }
+.eyebrow { color: #738b9c; }
+.button--primary { color: #fff; background: #266aab; border-color: #266aab; box-shadow: 0 2px 5px rgba(38, 106, 171, .18); }
+.button--primary:hover { background: #1f588c; border-color: #1f588c; box-shadow: 0 4px 12px rgba(38, 106, 171, .22); }
+.button--secondary { color: #3c5d75; border-color: #d3e0e9; }
+.button--secondary:hover { background: #f4f8fb; border-color: #b9cfde; }
+.button--ghost { color: #39759e; }
+.button--ghost:hover { color: #266aab; background: #eaf4fb; }
+.button--light { color: #1f588c; background: #f4faff; border-color: #f4faff; }
+.button--light:hover { color: #183e60; background: #fff; border-color: #fff; }
+.text-link,
+.text-link:hover,
+.task-item > button,
+.detail-section__heading > button,
+.review-section header button,
+.code-lists > div > button { color: #1797cb; }
+.tabs > button { color: #7b8e9b; }
+.tabs > button:hover,
+.tabs > button.active { color: #266aab; }
+.tabs > button.active::after { background: #1797cb; }
+.tabs > button > span { background: #edf4f9; }
+.search-box { border-color: #d9e4ec; }
+.search-box:focus-within { border-color: #74c1e0; box-shadow: 0 0 0 3px rgba(23, 151, 203, .09); }
+.field input,
+.field textarea,
+.field select,
+.table-toolbar select { border-color: #d6e2eb; }
+.field input:focus,
+.field textarea:focus,
+.field select:focus { border-color: #74c1e0; box-shadow: 0 0 0 3px rgba(23, 151, 203, .09); }
+.field__label { color: #405e73; }
+.progress-track { background: #e5edf3; }
+.progress-track > span { background: #266aab; }
+.badge--blue { color: #266aab; background: #eaf4fb; border-color: #d8eaf6; }
+.badge--mint { color: #1f6f9c; background: #dff2fb; border-color: #c9e8f6; }
+.badge--green { color: #197fa9; background: #e2f4fa; border-color: #cde9f3; }
+.area-strip > button:hover,
+.areas-overview > div:last-child > button:hover,
+.call-card:hover { border-color: #b7d4e5; }
+
+/* Blue dashboard panels */
+.active-call { background: linear-gradient(128deg, #266aab 0%, #237fbb 58%, #1797cb 100%); box-shadow: 0 7px 22px rgba(38, 106, 171, .16); }
+.active-call__code,
+.active-call__body > p,
+.active-call__facts span,
+.deadline-visual span { color: #d0e8f5; }
+.active-call__watermark { color: rgba(255, 255, 255, .1); }
+.stat-card__icon--green,
+.task-item__icon,
+.mini-summary--plain .mini-summary__icon,
+.support-note > span,
+.report-year,
+.finance-overview__icon,
+.integration-card header > span,
+.config-side > span,
+.config-list > button > span,
+.template-grid > article > span,
+.support-contact > span,
+.training-panel > span { color: #266aab; background: #eaf4fb; }
+.task-item__copy strong,
+.application-row__main strong,
+.application-row__amount { color: #38566c; }
+.application-row:hover .application-row__main strong { color: #1797cb; }
+.support-note { background: #f0f6fa; }
+.support-note p { color: #748b9a; }
+.support-note button { color: #266aab; }
+.workflow-panel { background: #1f4e79; }
+.phase-step::after { background: rgba(116, 193, 224, .24); }
+.phase-step__marker { color: #a9cfdf; background: #1f4e79; border-color: #668aa4; }
+.phase-step > div { background: #1f4e79; }
+.phase-step strong { color: #b2d0df; }
+.phase-step > div span { color: #83a9bd; }
+.phase-step.done::after { background: #74c1e0; }
+.phase-step.done .phase-step__marker { color: #e1f3fb; background: #32739d; border-color: #74c1e0; }
+.phase-step.current .phase-step__marker { color: #1f4e79; background: #dceffa; border-color: #dceffa; box-shadow: 0 0 0 4px rgba(116, 193, 224, .14); }
+.phase-step.current strong { color: #fff; }
+.phase-step.current > div span { color: #b8dfef; }
+.workflow-panel__heading .button { color: #c6e2ef; }
+.workflow-focus { background: linear-gradient(145deg, #edf6fc, #fff); border-color: #d5e7f2; }
+.workflow-focus__label { color: #1797cb; }
+.workflow-focus > p { color: #718899; }
+.workflow-focus__deadline { border-color: #dce9f2; }
+.workflow-focus__deadline strong { color: #46647a; }
+.mini-summary { background: #266aab; }
+.mini-summary > p,
+.mini-summary > small { color: #c7e2f0; }
+.mini-summary .progress-track { background: rgba(255, 255, 255, .18); }
+.mini-summary .progress-track > span { background: #a6def2; }
+.mini-summary--plain { background: #fff; border-color: #dfe8ef; }
+.mini-summary--plain > p,
+.mini-summary--plain > small { color: #7b8f9e; }
+.metric-band,
+.call-admin-summary { background: #266aab; }
+.metric-band__item > span,
+.metric-band__item > small,
+.call-admin-summary p { color: #c6e2ef; }
+.call-admin-summary > div > span { color: #a7d8ec; }
+.horizontal-bar__track { background: #edf2f6; }
+.attention-panel__all { color: #1797cb; }
+.area-strip > button { color: #5c7486; border-color: #dfe8ef; }
+
+/* Calls, reports, messages and administration */
+.summary-chips__dot.blue { background: #1797cb; }
+.summary-chips__dot.green { background: #266aab; }
+.archive-banner { background: #edf5fa; border-color: #dbe8f1; }
+.archive-banner > span { color: #3978a2; }
+.filter-chips button { color: #6e8291; border-color: #dce6ed; }
+.filter-chips button:hover { border-color: #8fc5df; }
+.filter-chips button.active { color: #fff; background: #266aab; border-color: #266aab; }
+.info-strip { background: #266aab; }
+.info-strip > span { color: #c5e6f4; }
+.info-strip p { color: #c6e2ef; }
+.finance-overview__main > strong { color: #205f91; }
+.finance-overview > div > strong { color: #2b536f; }
+.balance-callout { color: #266aab; background: #edf6fc; border-color: #d3e8f4; }
+.balance-callout span { color: #6b8ba0; }
+.upload-zone { background: #f7fbfd; border-color: #bad6e6; }
+.upload-zone:hover { background: #edf6fb; border-color: #74c1e0; }
+.upload-zone > span { color: #347ca8; background: #e2f1f9; }
+.upload-zone--compact > svg { color: #4b8fb4; }
+.document-name > span,
+.file-icon { color: #4b7f9f; background: #edf4f9; }
+.message-list > button:hover { background: #f3f8fb; }
+.message-list > button.active,
+.message-list > button.unread,
+.message-list > button.active.unread { background: #eaf4fb; box-shadow: inset 3px 0 #1797cb; }
+.message-list__icon { color: #557e98; background: #e7f0f6; }
+.message-list > button strong,
+.message-list > button.unread strong { color: #31536b; }
+.support-contact--primary { background: #266aab; border-color: #266aab; }
+.support-contact--primary > span { color: #d0ecf7; background: rgba(255, 255, 255, .12); }
+.support-contact--primary p,
+.support-contact--primary > small { color: #c9e4f0; }
+.support-contact > strong { color: #266aab; }
+.faq-list .open button strong { color: #266aab; }
+.video-placeholder { background: linear-gradient(140deg, #266aab, #1797cb); }
+.video-placeholder button { color: #266aab; }
+.admin-status-grid > button:hover,
+.admin-status-grid > button.active { border-color: #8fc3dd; box-shadow: 0 0 0 2px rgba(23, 151, 203, .05); }
+.admin-status-grid > button.active { background: #edf6fb; }
+.admin-status-grid > button > span { color: #347ca8; background: #eaf4fb; }
+.bulk-bar { background: #edf5fa; border-color: #d9e8f1; }
+.bulk-bar > span { color: #39769c; }
+.admin-call-card__phase strong,
+.admin-call-card__numbers strong { color: #45647a; }
+.vertical-phases > div.done > span { color: #266aab; background: #e7f3fa; border-color: #cbe3f1; }
+.vertical-phases > div.current > span { color: #fff; background: #266aab; border-color: #266aab; box-shadow: 0 0 0 4px #e6f2f9; }
+.vertical-phases > div.current strong,
+.vertical-phases > div.done strong { color: #266aab; }
+
+/* Scoring and allocation */
+.scoring-programs > button:hover { background: #f4f8fb; }
+.scoring-programs > button.active { background: #eaf4fb; box-shadow: inset 3px 0 #1797cb; }
+.scoring-programs > button.active > b { color: #266aab; background: #d8ecf8; }
+.program-status { color: #5691b3; }
+.score-summary { background: #f3f8fc; border-color: #d8e7f0; }
+.score-summary__total > strong,
+.score-input input { color: #266aab; }
+.score-input input { border-color: #c6dce9; }
+.score-input input:focus { border-color: #74c1e0; box-shadow: 0 0 0 3px #e6f3fa; }
+.score-range { background: linear-gradient(to right, #1797cb 0 var(--score-progress), #e1ebf1 var(--score-progress) 100%); }
+.score-range::-webkit-slider-thumb { background: #266aab; box-shadow: 0 0 0 1px #85bad6, 0 2px 5px rgba(38, 106, 171, .18); }
+.score-range::-moz-range-thumb { background: #266aab; box-shadow: 0 0 0 1px #85bad6; }
+.rank-number--top { color: #266aab; background: #e1f0f9; }
+.allocation-value { color: #266aab; }
+.budget-panel { background: #1f4e79; }
+.budget-panel__icon { color: #c2e5f3; background: rgba(116, 193, 224, .13); }
+.budget-panel > p,
+.budget-facts span { color: #bdd9e7; }
+.budget-panel .field__label { color: #d2e7f0; }
+.budget-panel .input-suffix > span { color: #c2ddE9; }
+.budget-facts .budget-remaining strong { color: #c9ecf7; }
+.budget-panel > small { color: #9fc2d3; }
+.config-list > button > span,
+.integration-card header > span,
+.template-grid > article > span { color: #347ca8; }
+.config-side li svg { color: #1797cb; }
+.user-cell strong { color: #38566c; }
+
+/* Guided application */
+.application-flow { background: #f4f7fa; }
+.brand--flow .brand__mark { color: #fff; background: #266aab; box-shadow: inset 0 -3px 0 #74c1e0; }
+.brand--flow strong { color: #21445e; }
+.application-flow__title > strong { color: #405f75; }
+.save-state { color: #6b8799; }
+.flow-call-info { background: #f5f9fc; border-color: #dfe9f0; }
+.flow-call-info > p { color: #266aab; }
+.flow-steps > button:hover { background: #f3f8fb; }
+.flow-steps > button.active { background: #eaf4fb; }
+.flow-steps > button.active > span { color: #fff; background: #266aab; border-color: #266aab; }
+.flow-steps > button.done > span { color: #347da8; background: #e4f1f9; border-color: #cbe2ef; }
+.flow-steps > button.active strong { color: #266aab; }
+.flow-steps > button.active small { color: #6f91a6; }
+.flow-steps > button > svg { color: #5794b5; }
+.flow-help { color: #4f819e; background: #edf5fa; }
+.flow-help > strong { color: #346f92; }
+.flow-help > p { color: #7893a5; }
+.flow-section__number { color: #65a1bf; }
+.smart-actions > button:hover { border-color: #8dc3de; background: #f5fafc; }
+.smart-actions > button.completed { border-color: #a9d1e5; background: #edf7fc; }
+.smart-actions > button > span { color: #347ca8; background: #e4f1f9; }
+.smart-actions strong { color: #3a627c; }
+.smart-actions > button > svg { color: #5794b5; }
+.verified-source { color: #718b9c; background: #edf4f9; border-color: #dfe9f0; }
+.finance-box { border-color: #dae7f0; }
+.finance-box__heading { color: #5b97b6; }
+.calculated-field { background: #eaf4fb; }
+.calculated-field > span { color: #6d8da1; }
+.calculated-field > strong { color: #266aab; }
+.attachment-summary > div { color: #4a86a8; }
+.upload-success { color: #237158; }
+.review-section header button { color: #1797cb; }
+.signature-box { background: #f4f9fc; border-color: #d6e6ef; }
+.signature-box__heading > span { color: #347ca8; background: #e2f1f9; }
+.odos-note strong { color: #4d7d99; }
+.flow-mobile-progress { color: #266aab; background: #e7f3fa; border-color: #d4e7f1; }
+.integration-receipt__badge { color: #237158; }
+
+/* Formal review and recurring blue emphasis */
+.application-timeline > div.active > span { color: #266aab; background: #e5f2fa; border-color: #c8e0ee; }
+.application-timeline > div.active strong { color: #3b657f; }
+.timeline-owner,
+.timeline-owner > button { color: #4f86a4; }
+.checklist-panel > label.checked > span { background: #266aab; border-color: #266aab; }
+.points-summary { background: #f2f3f9; }
+.registry-checks { --medvode-registry-border: #dce8f0; }
+.registry-checks > div { background: #f3f8fb; border-color: #dce8f0; }
+.registry-checks > div > span { color: #4f86a4; }
+.registry-checks p strong { color: #3e6b84; }
+.document-valid { color: #237158; }
+
+@media (max-width: 760px) {
+  .scoring-programs > button.active { border-color: #74c1e0; box-shadow: none; }
+  .flow-mobile-progress { color: #266aab; }
+}
