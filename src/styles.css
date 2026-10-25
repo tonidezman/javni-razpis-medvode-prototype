@@ -202,7 +202,7 @@ button { border: 0; background: none; }
 .input-suffix > span { position: absolute; right: 11px; color: #71847e; font-size: 10px; font-weight: 600; pointer-events: none; }
 .check-label { display: flex; gap: 9px; align-items: flex-start; color: #4c635c; font-size: 11px; line-height: 1.5; cursor: pointer; }
 .check-label input { accent-color: var(--primary); margin-top: 2px; }
-.tabs { display: flex; align-items: center; gap: 22px; min-height: 38px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs { display: flex; align-items: center; gap: 22px; min-height: 40px; border-bottom: 1px solid var(--line); overflow-x: auto; overflow-y: hidden; }
 .tabs > button { height: 38px; position: relative; padding: 0; color: #7b8b86; font-size: 11px; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
 .tabs > button:hover { color: var(--primary); }
 .tabs > button.active { color: #1d624f; font-weight: 600; }

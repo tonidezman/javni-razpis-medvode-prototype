@@ -18,6 +18,16 @@ npm run build    # production build
 npm run preview  # preview the production build
 ```
 
+## Deployment
+
+The prototype is live on Vercel at **https://javnirazpisiv3.vercel.app**.
+
+To deploy updates to production:
+
+```bash
+vercel --prod
+```
+
 ## What to explore
 
 - Use the **Vlagatelj / Skrbnik / Komisija / Administrator** switch in the header to change roles. The selected role is also reflected in the `role` URL parameter.
