@@ -32,9 +32,9 @@ vercel --prod
 
 - Use the **Vlagatelj / Skrbnik / Komisija / Administrator** switch in the header to change roles. The selected role is also reflected in the `role` URL parameter.
 - Open **Izobraževanja** in any role for audience-specific workshops, information days, video guides, and year-round user support.
-- Switch between three dashboard structures with the floating bottom bar, arrow keys, or:
+- The process-focused **variant B** is the default dashboard. Switch between all three dashboard structures with the floating bottom bar, arrow keys, or:
+  - `?variant=B` — process-focused workflow (default)
   - `?variant=A` — card-based overview
-  - `?variant=B` — process-focused workflow
   - `?variant=C` — analytical overview
 
 ### Applicant

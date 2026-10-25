@@ -165,24 +165,23 @@ body { color: var(--medvode-ink); background: var(--canvas); }
 .support-note { background: #f0f6fa; }
 .support-note p { color: #748b9a; }
 .support-note button { color: #266aab; }
-.workflow-panel { background: #1f4e79; }
+.workflow-panel { background: linear-gradient(135deg, #183e60 0%, #1f4e79 52%, #266aab 100%); }
 .phase-step::after { background: rgba(116, 193, 224, .24); }
 .phase-step__marker { color: #a9cfdf; background: #1f4e79; border-color: #668aa4; }
-.phase-step > div { background: #1f4e79; }
-.phase-step strong { color: #b2d0df; }
-.phase-step > div span { color: #83a9bd; }
+.phase-step > div { background: transparent; }
+.phase-step strong { color: #e4f0f7; }
+.phase-step > div span { color: #e0edf5; }
 .phase-step.done::after { background: #74c1e0; }
 .phase-step.done .phase-step__marker { color: #e1f3fb; background: #32739d; border-color: #74c1e0; }
 .phase-step.current .phase-step__marker { color: #1f4e79; background: #dceffa; border-color: #dceffa; box-shadow: 0 0 0 4px rgba(116, 193, 224, .14); }
 .phase-step.current strong { color: #fff; }
-.phase-step.current > div span { color: #b8dfef; }
-.workflow-panel__heading .button { color: #c6e2ef; }
+.phase-step.current > div span { color: #fff; }
 .workflow-focus { background: linear-gradient(145deg, #edf6fc, #fff); border-color: #d5e7f2; }
 .workflow-focus__label { color: #1797cb; }
 .workflow-focus > p { color: #718899; }
-.workflow-focus__deadline { border-color: #dce9f2; }
+.workflow-focus__deadline { border-color: #ead9bd; }
 .workflow-focus__deadline strong { color: #46647a; }
-.mini-summary { background: #266aab; }
+.mini-summary { background: linear-gradient(145deg, #1f588c, #266aab 62%, #1797cb); }
 .mini-summary > p,
 .mini-summary > small { color: #c7e2f0; }
 .mini-summary .progress-track { background: rgba(255, 255, 255, .18); }

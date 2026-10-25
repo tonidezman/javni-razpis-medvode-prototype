@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import {
   ArrowRight, BellRing, CalendarClock, Check, CheckCircle2, CircleAlert,
   Clock3, FileCheck2, FilePlus2, Files, FolderClock, MessageSquareText,
@@ -204,52 +205,112 @@ export function DashboardB({ role, applications, calls, activeManagedCall, onMan
   const mine = role === 'applicant';
   const visible = (mine ? applications.filter((item) => item.mine) : applications).slice(0, 5);
   const call = activeManagedCall || calls.find((item) => item.id === (mine ? 'sport-2026' : 'kultura-2026')) || calls[0];
-  const activePhase = mine ? 1 : role === 'admin' ? call.phase : 5;
+  const activePhase = call.phase;
+  const currentPhase = phases[activePhase - 1];
+  const canApply = activePhase === 1 && call.status === 'Odprt';
+  const phaseTrackRef = useRef(null);
+  useEffect(() => {
+    const centerActiveStep = () => {
+      const track = phaseTrackRef.current;
+      const activeStep = track?.querySelector('[aria-current="step"]');
+      if (!track || !activeStep || track.scrollWidth <= track.clientWidth) return;
+      const trackBounds = track.getBoundingClientRect();
+      const stepBounds = activeStep.getBoundingClientRect();
+      const left = track.scrollLeft + stepBounds.left - trackBounds.left - (track.clientWidth - stepBounds.width) / 2;
+      track.scrollTo({ left: Math.max(0, left), behavior: 'auto' });
+    };
+    centerActiveStep();
+    window.addEventListener('resize', centerActiveStep);
+    return () => window.removeEventListener('resize', centerActiveStep);
+  }, [activePhase, call.id]);
+  const commissionHeader = activePhase === 5
+    ? { eyebrow: 'Delovno mesto komisije', title: 'Ocene komisije, korak za korakom.', description: 'Dodeljeni programi, merila in skupni napredek vrednotenja.', action: 'Nadaljuj vrednotenje', page: 'scoring', icon: ClipboardCheck }
+    : activePhase > 5
+      ? { eyebrow: 'Delovno mesto komisije', title: 'Od ocen do realizacije programov.', description: 'Pregled zaključenega vrednotenja, odločb in dokumentacije dodeljenih programov.', action: 'Preglej dokumente', page: 'documents', icon: FileCheck2 }
+      : { eyebrow: 'Delovno mesto komisije', title: 'Priprava na vrednotenje programov.', description: 'Preglejte dodeljeni razpis in se pripravite na vrednotenje po zaključku formalnega pregleda.', action: 'Dodeljene vloge', page: 'commission-applications', icon: Files };
   const header = {
-    applicant: { eyebrow: 'Vlagateljski portal', title: 'Vaš razpis, korak za korakom.', description: 'Spremljajte potek vloge in dokončajte odprte naloge na enem mestu.', action: 'Vprašaj skrbnika', page: 'messages', icon: MessageSquareText },
-    admin: { eyebrow: 'Skrbniško delovno mesto', title: 'Od prejete vloge do realizacije.', description: 'Procesni pregled aktivnega razpisa in naloge po posameznih fazah.', action: 'Podpora uporabnikom', page: 'support', icon: MessageSquareText },
-    commission: { eyebrow: 'Delovno mesto komisije', title: 'Ocene komisije, korak za korakom.', description: 'Dodeljeni programi, merila in skupni napredek vrednotenja.', action: 'Pomoč pri merilih', page: 'support', icon: MessageSquareText },
+    applicant: { eyebrow: 'Vlagateljski portal', title: 'Vaš razpis, korak za korakom.', description: 'Spremljajte potek vloge in dokončajte odprte naloge na enem mestu.', action: 'Oddaj novo vlogo', page: null, icon: FilePlus2 },
+    admin: { eyebrow: 'Skrbniško delovno mesto', title: 'Od prejete vloge do realizacije.', description: 'Procesni pregled aktivnega razpisa in naloge po posameznih fazah.', action: 'Nov razpis', page: 'admin-calls', icon: Plus },
+    commission: commissionHeader,
     administrator: { eyebrow: 'Sistemska administracija', title: 'Nadzor sistema na enem mestu.', description: 'Uporabniki, nastavitve in integracije s pregledom celotnega postopka.', action: 'Odpri administracijo', page: 'administration', icon: UsersRound },
   }[role];
+  const adminFocusByPhase = {
+    1: { title: 'Spremljajte prijave in rok oddaje', description: `Prejetih je že ${call.applications} vlog. Pred zaključkom preverite nepopolne prijave in odgovorite na odprta vprašanja vlagateljev.`, label: 'Rok za oddajo', date: call.deadline, action: 'Preglej prejete vloge', page: 'admin-applications', icon: Files },
+    2: { title: 'Pripravite izobraževanje za vlagatelje', description: 'Na voljo so gradiva, video navodila in termin individualne podpore. Vlagatelje obvestite o naslednjem informativnem dnevu.', label: 'Naslednji informativni dan', date: '28. oktober 2026', action: 'Odpri izobraževanja', page: 'izobrazevanja', icon: UsersRound },
+    3: { title: 'Dokončajte formalni pregled', description: `Pri razpisu je ${call.applications} prejetih vlog. Preverite izpolnjevanje pogojev in priloge ter pripravite morebitne pozive k dopolnitvi.`, label: 'Prednostni rok', date: '30. oktober 2026', action: 'Odpri formalni pregled', page: 'admin-applications', icon: ListChecks },
+    4: { title: 'Preglejte dopolnitve vlog', description: 'Preverite prispele priloge, podaljšajte rok po potrebi in zaključite formalni pregled pred vrednotenjem.', label: 'Rok za dopolnitev', date: '29. oktober 2026', action: 'Odpri dopolnitve', page: 'admin-applications', icon: Upload },
+    5: { title: 'Dokončajte vrednotenje 8 programov', description: 'Komisija je ocenila večino programov. Za predlog razporeditve sredstev manjka še 8 ocen in skupna potrditev rang liste.', label: 'Načrtovani zaključek', date: '30. oktober 2026', action: 'Nadaljuj vrednotenje', page: 'scoring', icon: ClipboardCheck },
+    6: { title: 'Pripravite odločbe in pogodbe', description: 'Preglejte potrjeno rang listo, pripravite odločbe o sofinanciranju in pošljite pogodbe v podpis izbranim vlagateljem.', label: 'Načrtovana izdaja', date: '6. november 2026', action: 'Preglej dokumente', page: 'documents', icon: FileCheck2 },
+    7: { title: 'Spremljajte realizacijo programov', description: 'Preglejte odprte zahtevke za izplačilo, račune in končna poročila, ki jih morate potrditi.', label: 'Naslednji pregled', date: 'Danes, 14:00', action: 'Odpri zahtevke', page: 'admin-reports', icon: FileCheck2 },
+  };
+  const adminFocus = adminFocusByPhase[activePhase] || adminFocusByPhase[1];
+  const commissionFocus = activePhase === 5
+    ? { title: 'Ocenite preostalih 8 programov', description: 'Skupno je ocenjenih 65 od 73 dodeljenih programov. Vaše ocene se samodejno shranjujejo v revizijsko sled.', label: 'Rok vrednotenja', date: '30. oktober 2026', action: 'Nadaljuj ocenjevanje', page: 'scoring', icon: ClipboardCheck }
+    : activePhase === 6
+      ? { title: 'Preglejte pripravljene odločbe', description: 'Vrednotenje je zaključeno. Preverite skupno rang listo in pripravljene odločbe o sofinanciranju izbranih programov.', label: 'Načrtovana izdaja', date: '6. november 2026', action: 'Preglej dokumente', page: 'documents', icon: FileCheck2 }
+      : activePhase === 7
+        ? { title: 'Spremljajte realizacijo programov', description: 'Odobreni programi so v realizaciji. Dokumentacija ostaja na voljo komisiji, zahtevke in poročila pa obravnava skrbnik razpisa.', label: 'Status vrednotenja', date: 'Zaključeno in potrjeno', action: 'Odpri dokumente', page: 'documents', icon: FileCheck2 }
+        : { title: 'Vrednotenje še ni na vrsti', description: 'Komisija bo programe dobila v ocenjevanje po zaključenem formalnem pregledu. Do takrat si lahko ogledate razpis in dodeljene vloge.', label: 'Trenutna faza', date: currentPhase.name, action: 'Preglej dodeljene vloge', page: 'commission-applications', icon: Files };
   const focus = {
     applicant: { title: 'Dopolnite manjkajočo prilogo', description: 'Pri vlogi »Vadba za starejše« manjka potrdilo o izvedenih programih v preteklem letu.', label: 'Rok za dopolnitev', date: '29. oktober 2026', action: 'Odpri dopolnitev', page: 'applications', icon: Upload },
-    admin: { title: 'Dokončajte vrednotenje 8 programov', description: 'Komisija je ocenila 65 od 73 programov. Za predlog razporeditve sredstev manjka še 8 ocen.', label: 'Načrtovani zaključek', date: '30. oktober 2026', action: 'Nadaljuj vrednotenje', page: 'scoring', icon: ClipboardCheck },
-    commission: { title: 'Ocenite preostalih 8 programov', description: 'Skupno je ocenjenih 65 od 73 dodeljenih programov. Vaše ocene se samodejno shranjujejo v revizijsko sled.', label: 'Rok vrednotenja', date: '30. oktober 2026', action: 'Nadaljuj ocenjevanje', page: 'scoring', icon: ClipboardCheck },
+    admin: adminFocus,
+    commission: commissionFocus,
     administrator: { title: 'Aktivirajte 5 novih uporabnikov', description: 'Novi uporabniki čakajo dodelitev vloge in razpisnih področij. Pred aktivacijo preverite tudi njihove dostope.', label: 'Zadnji sistemski pregled', date: 'Danes, 08:55', action: 'Odpri administracijo', page: 'administration', icon: UsersRound },
   }[role];
+  const heroStats = mine ? [
+    { label: 'Moje aktivne vloge', value: '2', icon: Files },
+    { label: 'Rok za oddajo', value: '18. 11. 2026', icon: CalendarClock },
+    { label: 'Odobrena sredstva', value: '45.700 €', icon: WalletCards },
+  ] : role === 'commission' ? [
+    { label: 'Dodeljeni programi', value: '73', icon: Files },
+    { label: 'Ocenjeni programi', value: activePhase > 5 ? '73' : activePhase === 5 ? '65' : '0', icon: ClipboardCheck },
+    { label: 'Preostale ocene', value: activePhase > 5 ? '0' : activePhase === 5 ? '8' : '73', icon: FolderClock },
+  ] : [
+    { label: 'Prejete vloge', value: call.applications, icon: Files },
+    { label: 'Rok oziroma status', value: call.phase === 1 ? call.deadline : call.status, icon: CalendarClock },
+    { label: 'Okvir sredstev', value: formatCurrency(call.budget), icon: WalletCards },
+  ];
   return (
     <div className="dashboard dashboard-b">
       <PageHeader
         eyebrow={header.eyebrow}
         title={header.title}
         description={header.description}
-        actions={<Button variant="secondary" icon={header.icon} onClick={() => navigate(header.page)}>{header.action}</Button>}
+        actions={<Button icon={header.icon} disabled={mine && !canApply} onClick={() => mine ? startApplication(call) : navigate(header.page)}>{mine && !canApply ? 'Oddaja je zaključena' : header.action}</Button>}
       />
       {role === 'admin' && <ManagedCallSwitcher calls={calls} activeCall={activeManagedCall} onChange={onManagedCallChange} />}
-      <section className="workflow-panel">
+      <section className="workflow-panel" aria-labelledby="workflow-call-title">
         <div className="workflow-panel__heading">
-          <div><Badge tone="green">{call.code}</Badge><h2>{call.title}</h2></div>
-          <Button variant="ghost" size="sm" onClick={() => navigate(callsPageFor(role))}>{role === 'commission' ? 'Dodeljene vloge' : 'Podrobnosti razpisa'}<ArrowUpRight size={15} /></Button>
+          <div>
+            <div className="workflow-panel__kicker"><span aria-hidden="true" />{mine ? 'Javni razpis' : role === 'commission' ? 'Dodeljeno vrednotenje' : 'Aktivni razpis'} · {call.area}</div>
+            <h2 id="workflow-call-title">{call.title}</h2>
+            <p className="workflow-panel__meta"><span>{call.code}</span><span aria-hidden="true">·</span><span>{currentPhase.name}</span></p>
+          </div>
+          <Button variant="light" size="sm" onClick={() => navigate(callsPageFor(role))}>{role === 'commission' ? 'Dodeljene vloge' : 'Podrobnosti razpisa'}<ArrowUpRight size={15} /></Button>
         </div>
-        <div className="phase-track">
+        <p className="workflow-panel__description">{call.description}</p>
+        <div className="workflow-call-stats">
+          {heroStats.map((stat) => <div key={stat.label}><stat.icon size={18} /><span><small>{stat.label}</small><strong>{stat.value}</strong></span></div>)}
+        </div>
+        <ol className="phase-track" aria-label="Faze razpisa" ref={phaseTrackRef}>
           {phases.map((phase) => (
-            <div className={`phase-step ${phase.id < activePhase ? 'done' : ''} ${phase.id === activePhase ? 'current' : ''}`} key={phase.id}>
-              <span className="phase-step__marker">{phase.id < activePhase ? <Check size={15} /> : phase.id}</span>
+            <li className={`phase-step ${phase.id < activePhase ? 'done' : ''} ${phase.id === activePhase ? 'current' : ''}`} key={phase.id} aria-current={phase.id === activePhase ? 'step' : undefined} title={phase.name}>
+              <span className="phase-step__marker" aria-hidden="true">{phase.id < activePhase ? <Check size={15} /> : phase.id}</span>
               <div><strong>{phase.short}</strong><span>{phase.id === activePhase ? 'Aktivna faza' : phase.id < activePhase ? 'Zaključeno' : 'Sledi'}</span></div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
       <div className="workflow-grid">
-        <section className="workflow-focus">
+        <section className="workflow-focus panel">
           <div className="workflow-focus__label"><Sparkles size={16} /> Prednostna naloga</div>
           <h2>{focus.title}</h2>
           <p>{focus.description}</p>
-          <div className="workflow-focus__deadline"><Clock3 size={17} /><span>{focus.label}<strong>{focus.date}</strong></span></div>
+          <div className="workflow-focus__deadline"><Clock3 size={18} /><span>{focus.label}<strong>{focus.date}</strong></span></div>
           <Button icon={focus.icon} onClick={() => navigate(focus.page)}>{focus.action}</Button>
         </section>
         <section className="panel workflow-tasks">
-          <SectionHeading title="Še ta teden" description="3 odprte naloge" />
+          <SectionHeading title="Naloge ta teden" description="3 odprte naloge" />
           <Tasks role={role} navigate={navigate} />
         </section>
         <aside className="workflow-aside">
@@ -258,18 +319,18 @@ export function DashboardB({ role, applications, calls, activeManagedCall, onMan
             <p>{mine ? 'Odobrena sredstva v 2026' : 'Okvir sredstev razpisa'}</p>
             <strong>{mine ? '45.700 €' : formatCurrency(call.budget)}</strong>
             <ProgressBar value={mine ? 68 : 74} />
-            <small>{mine ? '14.576 € še na voljo' : '229.400 € že razporejenih'}</small>
+            <small>{mine ? '14.576 € še na voljo' : `${formatCurrency(Math.round(call.budget * 0.74))} že razporejenih`}</small>
           </section>
           <section className="mini-summary mini-summary--plain">
-            <span className="mini-summary__icon"><UsersRound size={20} /></span>
-            <p>{mine ? 'Vaša skrbnica' : role === 'commission' ? 'Člani komisije' : 'Aktivni uporabniki danes'}</p>
-            <strong>{mine ? 'Maja Kovač' : role === 'commission' ? '5' : '84'}</strong>
-            <small>{mine ? 'Odgovori praviloma v 24 urah' : role === 'commission' ? '3 člani so zaključili ocenjevanje' : '12 skrbnikov · 72 vlagateljev'}</small>
-            {mine && <button className="text-link" type="button" onClick={() => navigate('support')}>Prikaži kontakt<ArrowRight size={14} /></button>}
+            <span className="mini-summary__icon">{role === 'admin' ? <Files size={20} /> : <UsersRound size={20} />}</span>
+            <p>{mine ? 'Vaša skrbnica' : role === 'commission' ? 'Člani komisije' : role === 'admin' ? 'Dodeljeni razpisi' : 'Aktivni uporabniki danes'}</p>
+            <strong>{mine ? 'Maja Kovač' : role === 'commission' ? '5' : role === 'admin' ? calls.length : '84'}</strong>
+            <small>{mine ? 'Odgovori praviloma v 24 urah' : role === 'commission' ? '3 člani so zaključili ocenjevanje' : role === 'admin' ? calls.map((item) => item.area).join(' · ') : '12 skrbnikov · 72 vlagateljev'}</small>
+            {(mine || role === 'admin') && <button className="text-link" type="button" onClick={() => navigate(mine ? 'support' : 'admin-calls')}>{mine ? 'Prikaži kontakt' : 'Odpri moje razpise'}<ArrowRight size={14} /></button>}
           </section>
         </aside>
       </div>
-      <section className="panel recent-panel">
+      <section className="panel recent-panel workflow-recent">
         <SectionHeading title={mine ? 'V teku pri vas' : role === 'commission' ? 'Dodeljeni programi' : 'Zadnja aktivnost na vlogah'} link="Vse vloge" onLink={() => navigate(applicationsPageFor(role))} />
         <ApplicationRows items={visible} onSelect={selectApplication} compact />
       </section>

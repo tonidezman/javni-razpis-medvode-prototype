@@ -23,7 +23,7 @@ import {
 } from './data.js';
 import { Avatar, Badge, Button, IconButton, SearchBox } from './components/UI.jsx';
 
-const variantNames = { A: 'Kartični pregled', B: 'Procesni tok', C: 'Analitični pregled' };
+const variantNames = { B: 'Procesni tok', A: 'Kartični pregled', C: 'Analitični pregled' };
 
 const applicantNav = [
   { id: 'dashboard', label: 'Pregled', icon: LayoutDashboard },
@@ -90,7 +90,7 @@ export default function App() {
   const [page, setPage] = useState('dashboard');
   const [variant, setVariant] = useState(() => {
     const value = new URLSearchParams(window.location.search).get('variant');
-    return ['A', 'B', 'C'].includes(value) ? value : 'A';
+    return ['A', 'B', 'C'].includes(value) ? value : 'B';
   });
   const [mobileNav, setMobileNav] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
