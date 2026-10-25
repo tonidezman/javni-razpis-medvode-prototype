@@ -21,6 +21,7 @@ npm run preview  # preview the production build
 ## What to explore
 
 - Use the **Vlagatelj / Skrbnik / Komisija / Administrator** switch in the header to change roles. The selected role is also reflected in the `role` URL parameter.
+- Open **Izobraževanja** in any role for audience-specific workshops, information days, video guides, and year-round user support.
 - Switch between three dashboard structures with the floating bottom bar, arrow keys, or:
   - `?variant=A` — card-based overview
   - `?variant=B` — process-focused workflow
@@ -50,6 +51,7 @@ npm run preview  # preview the production build
 - Role-specific dashboard with assigned programs, scoring progress, and commission tasks.
 - Assigned application register without formal-review or supplementation permissions.
 - Criteria scoring with automatic totals, rankings, and proposed funding allocation.
+- Full-screen **Sejna soba · projekcija** with rankings, formal review, scores, funding allocation, documents, and payment-request decisions.
 - Read-only application details and supporting documents.
 
 ### Administrator

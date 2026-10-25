@@ -1,0 +1,36 @@
+/* Training and information days */
+.education-tabs { margin-bottom: 19px; }
+.education-tabs .tabs { max-width: 620px; }
+.education-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.education-card { min-height: 295px; padding: 21px; display: flex; flex-direction: column; }
+.education-card__top { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.education-card__icon { width: 40px; height: 40px; display: grid; place-items: center; color: var(--primary); background: var(--primary-soft); border-radius: 9px; }
+.education-card h2 { margin-top: 15px; color: var(--ink); font-size: 16px; line-height: 1.4; letter-spacing: -.2px; }
+.education-card > p { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.education-card__meta { margin: 18px 0; display: flex; flex-direction: column; gap: 9px; }
+.education-card__meta > span { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 10.5px; }
+.education-card__meta svg { color: var(--primary); }
+.education-card > footer { margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); }
+.education-card > footer > small { color: var(--muted-2); font-size: 9px; }
+.education-support { margin-top: 22px; padding: 22px; }
+.education-support__grid { margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.education-support__grid > article { min-height: 100px; padding: 16px; display: flex; align-items: flex-start; gap: 12px; background: var(--canvas); border: 1px solid var(--line); border-radius: 9px; }
+.education-support__grid > article > span { width: 36px; height: 36px; display: grid; place-items: center; flex: 0 0 auto; color: var(--primary); background: var(--primary-soft); border-radius: 8px; }
+.education-support__grid h3 { color: var(--ink); font-family: 'DM Sans'; font-size: 11px; line-height: 1.45; }
+.education-support__grid p { margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .education-support__grid { grid-template-columns: 1fr; }
+  .education-support__grid > article { min-height: auto; }
+}
+
+@media (max-width: 760px) {
+  .education-grid { grid-template-columns: 1fr; }
+  .education-card { min-height: 280px; padding: 18px; }
+  .education-support { padding: 18px; }
+}
+
+@media (max-width: 480px) {
+  .education-card > footer { align-items: flex-start; flex-direction: column; }
+  .education-card > footer .button { width: 100%; }
+}

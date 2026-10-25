@@ -3,13 +3,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Archive, Bell, BookOpenCheck, Check, CheckCircle2, ChevronLeft, ChevronRight,
   ClipboardCheck, Files, FolderOpen, HelpCircle, LayoutDashboard, LifeBuoy,
-  Menu, MessageSquareText, Megaphone, PanelLeftClose, ReceiptText, Search,
+  Menu, MessageSquareText, Megaphone, PanelLeftClose, Projector, ReceiptText, Search,
   Settings2, ShieldCheck, Sparkles, UserRound, UsersRound, X,
 } from 'lucide-react';
 import { DashboardA, DashboardB, DashboardC } from './Dashboards.jsx';
 import ApplicationFlow from './ApplicationFlow.jsx';
 import ApplicationDetail from './ApplicationDetail.jsx';
 import CallArchivePage from './CallArchivePage.jsx';
+import CommissionProjection from './CommissionProjection.jsx';
+import EducationPage from './EducationPage.jsx';
 import {
   ApplicationsPage, CallsPage, DocumentsPage, MessagesPage, ReportsPage, SupportPage,
 } from './ApplicantPages.jsx';
@@ -29,6 +31,7 @@ const applicantNav = [
   { id: 'calls', label: 'Javni razpisi', icon: Megaphone },
   { id: 'call-archive', label: 'Arhiv razpisov', icon: Archive },
   { id: 'reports', label: 'Zahtevki in poročila', icon: ReceiptText },
+  { id: 'izobrazevanja', label: 'Izobraževanja', icon: BookOpenCheck },
   { id: 'documents', label: 'Dokumenti', icon: FolderOpen },
   { id: 'messages', label: 'Sporočila', icon: MessageSquareText, badge: '1' },
 ];
@@ -40,6 +43,7 @@ const adminNav = [
   { id: 'admin-applications', label: 'Vloge', icon: Files, badge: '42' },
   { id: 'scoring', label: 'Vrednotenje', icon: ClipboardCheck },
   { id: 'admin-reports', label: 'Zahtevki in poročila', icon: ReceiptText, badge: '4' },
+  { id: 'izobrazevanja', label: 'Izobraževanja', icon: BookOpenCheck },
   { id: 'documents', label: 'Dokumenti', icon: FolderOpen },
 ];
 
@@ -47,6 +51,8 @@ const commissionNav = [
   { id: 'dashboard', label: 'Pregled', icon: LayoutDashboard },
   { id: 'commission-applications', label: 'Dodeljene vloge', icon: Files, badge: '8' },
   { id: 'scoring', label: 'Vrednotenje', icon: ClipboardCheck },
+  { id: 'commission-projection', label: 'SEJNA SOBA · PROJEKCIJA', icon: Projector },
+  { id: 'izobrazevanja', label: 'Izobraževanja', icon: BookOpenCheck },
   { id: 'documents', label: 'Dokumenti', icon: FolderOpen },
 ];
 
@@ -100,6 +106,7 @@ export default function App() {
   const [users, setUsers] = useState(initialUsers);
   const [applicationCall, setApplicationCall] = useState(null);
   const [selectedApplicationId, setSelectedApplicationId] = useState(null);
+  const [projectionOpen, setProjectionOpen] = useState(false);
 
   const selectedApplication = applications.find((item) => item.id === selectedApplicationId);
   const navItems = navigationByRole[role];
@@ -122,6 +129,20 @@ export default function App() {
     setNotificationsOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const closeProjection = useCallback(() => {
+    setProjectionOpen(false);
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  }, []);
+
+  const openProjection = () => {
+    setProjectionOpen(true);
+    setMobileNav(false);
+    setNotificationsOpen(false);
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  };
 
   const changeRole = (nextRole) => {
     if (nextRole === role) return;
@@ -146,7 +167,7 @@ export default function App() {
 
   useEffect(() => {
     const handleKey = (event) => {
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable || applicationCall || selectedApplicationId) return;
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable || applicationCall || selectedApplicationId || projectionOpen) return;
       const keys = Object.keys(variantNames);
       const index = keys.indexOf(variant);
       if (event.key === 'ArrowRight') changeVariant(keys[(index + 1) % keys.length]);
@@ -154,7 +175,7 @@ export default function App() {
     };
     document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
-  }, [variant, changeVariant, applicationCall, selectedApplicationId]);
+  }, [variant, changeVariant, applicationCall, selectedApplicationId, projectionOpen]);
 
   const startApplication = (call) => setApplicationCall(call || calls.find((item) => item.phase === 1 && item.status === 'Odprt') || calls[0]);
   const submitApplication = (application) => {
@@ -182,6 +203,7 @@ export default function App() {
     case 'calls': content = <CallsPage calls={calls} onApply={startApplication} notify={notify} navigate={navigate} />; break;
     case 'call-archive': content = <CallArchivePage calls={archivedCalls} role={role} notify={notify} />; break;
     case 'reports': content = <ReportsPage requests={requests} setRequests={setRequests} notify={notify} />; break;
+    case 'izobrazevanja': content = <EducationPage role={role} navigate={navigate} notify={notify} />; break;
     case 'documents': content = <DocumentsPage role={role} documents={documents} setDocuments={setDocuments} notify={notify} />; break;
     case 'messages': content = <MessagesPage notify={notify} />; break;
     case 'support': content = <SupportPage role={role} notify={notify} />; break;
@@ -200,7 +222,7 @@ export default function App() {
         <div className="sidebar__brand"><span className="brand__mark">M</span><div><strong>Razpisi</strong><small>Občina Medvode</small></div><IconButton icon={X} label="Zapri meni" className="sidebar__close" onClick={() => setMobileNav(false)} /></div>
         <div className="prototype-label"><Sparkles size={13} /><span>INTERAKTIVNI PROTOTIP</span></div>
         <div className="sidebar__context"><span>{profile.context}</span><strong>{profile.organization}</strong></div>
-        <nav className="sidebar__nav" aria-label="Glavna navigacija"><span className="sidebar__nav-label">Meni</span>{navItems.map((item) => <button type="button" key={item.id} className={page === item.id ? 'active' : ''} onClick={() => navigate(item.id)}><item.icon size={19} strokeWidth={1.8} /><span>{item.label}</span>{item.badge && <b>{item.badge}</b>}</button>)}</nav>
+        <nav className="sidebar__nav" aria-label="Glavna navigacija"><span className="sidebar__nav-label">Meni</span>{navItems.map((item) => <button type="button" key={item.id} className={`${page === item.id ? 'active' : ''} ${item.id === 'commission-projection' ? 'commission-projection-link' : ''}`} onClick={() => item.id === 'commission-projection' ? openProjection() : navigate(item.id)}><item.icon size={19} strokeWidth={1.8} /><span>{item.label}</span>{item.badge && <b>{item.badge}</b>}</button>)}</nav>
         <div className="sidebar__bottom"><button type="button" className={page === 'support' ? 'active' : ''} onClick={() => navigate('support')}><LifeBuoy size={19} /><span>Pomoč in podpora</span><ChevronRight size={15} /></button><div className="sidebar__support"><span><ShieldCheck size={18} /></span><div><strong>Podatki so varni</strong><p>24/7 dostop · ODOS hramba</p></div></div><div className="sidebar__user"><Avatar name={profile.name} /><div><strong>{profile.name}</strong><span>{profile.subtitle}</span></div><ChevronRight size={16} /></div></div>
       </aside>
       {mobileNav && <button className="sidebar-scrim" aria-label="Zapri meni" type="button" onClick={() => setMobileNav(false)} />}
@@ -213,6 +235,7 @@ export default function App() {
       {toast && <div className="toast" role="status"><span><Check size={16} /></span><p>{toast}</p><button type="button" onClick={() => setToast(null)} aria-label="Zapri obvestilo"><X size={16} /></button></div>}
       {applicationCall && <ApplicationFlow call={applicationCall} onClose={() => setApplicationCall(null)} onSubmit={submitApplication} onFinish={finishApplication} notify={notify} />}
       {selectedApplication && <ApplicationDetail application={selectedApplication} role={role} onClose={() => setSelectedApplicationId(null)} onUpdate={updateApplication} onScore={() => { setSelectedApplicationId(null); navigate('scoring'); }} notify={notify} />}
+      {projectionOpen && <CommissionProjection onClose={closeProjection} onRoleChange={(nextRole) => { closeProjection(); changeRole(nextRole); }} requests={requests} setRequests={setRequests} notify={notify} />}
     </div>
   );
 }
