@@ -1,7 +1,7 @@
 // Three variants of the signed-in home workspace, switchable via ?variant=A|B|C.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Bell, BookOpenCheck, Check, CheckCircle2, ChevronLeft, ChevronRight,
+  Archive, Bell, BookOpenCheck, Check, CheckCircle2, ChevronLeft, ChevronRight,
   ClipboardCheck, Files, FolderOpen, HelpCircle, LayoutDashboard, LifeBuoy,
   Menu, MessageSquareText, Megaphone, PanelLeftClose, ReceiptText, Search,
   Settings2, ShieldCheck, Sparkles, UserRound, UsersRound, X,
@@ -9,6 +9,7 @@ import {
 import { DashboardA, DashboardB, DashboardC } from './Dashboards.jsx';
 import ApplicationFlow from './ApplicationFlow.jsx';
 import ApplicationDetail from './ApplicationDetail.jsx';
+import CallArchivePage from './CallArchivePage.jsx';
 import {
   ApplicationsPage, CallsPage, DocumentsPage, MessagesPage, ReportsPage, SupportPage,
 } from './ApplicantPages.jsx';
@@ -16,7 +17,7 @@ import {
   AdminApplicationsPage, AdminCallsPage, AdminReportsPage, AdministrationPage, CommissionApplicationsPage, ScoringPage,
 } from './AdminPages.jsx';
 import {
-  initialApplications, initialCalls, initialDocuments, initialRequests, initialUsers,
+  archivedCalls, initialApplications, initialCalls, initialDocuments, initialRequests, initialUsers,
 } from './data.js';
 import { Avatar, Badge, Button, IconButton, SearchBox } from './components/UI.jsx';
 
@@ -26,6 +27,7 @@ const applicantNav = [
   { id: 'dashboard', label: 'Pregled', icon: LayoutDashboard },
   { id: 'applications', label: 'Moje vloge', icon: Files, badge: '2' },
   { id: 'calls', label: 'Javni razpisi', icon: Megaphone },
+  { id: 'call-archive', label: 'Arhiv razpisov', icon: Archive },
   { id: 'reports', label: 'Zahtevki in poročila', icon: ReceiptText },
   { id: 'documents', label: 'Dokumenti', icon: FolderOpen },
   { id: 'messages', label: 'Sporočila', icon: MessageSquareText, badge: '1' },
@@ -34,6 +36,7 @@ const applicantNav = [
 const adminNav = [
   { id: 'dashboard', label: 'Pregled', icon: LayoutDashboard },
   { id: 'admin-calls', label: 'Razpisi', icon: Megaphone },
+  { id: 'call-archive', label: 'Arhiv razpisov', icon: Archive },
   { id: 'admin-applications', label: 'Vloge', icon: Files, badge: '42' },
   { id: 'scoring', label: 'Vrednotenje', icon: ClipboardCheck },
   { id: 'admin-reports', label: 'Zahtevki in poročila', icon: ReceiptText, badge: '4' },
@@ -176,7 +179,8 @@ export default function App() {
   let content;
   switch (page) {
     case 'applications': content = <ApplicationsPage applications={applications} onSelect={(item) => setSelectedApplicationId(item.id)} onApply={startApplication} calls={calls} initialQuery={searchQuery} />; break;
-    case 'calls': content = <CallsPage calls={calls} onApply={startApplication} notify={notify} />; break;
+    case 'calls': content = <CallsPage calls={calls} onApply={startApplication} notify={notify} navigate={navigate} />; break;
+    case 'call-archive': content = <CallArchivePage calls={archivedCalls} role={role} notify={notify} />; break;
     case 'reports': content = <ReportsPage requests={requests} setRequests={setRequests} notify={notify} />; break;
     case 'documents': content = <DocumentsPage role={role} documents={documents} setDocuments={setDocuments} notify={notify} />; break;
     case 'messages': content = <MessagesPage notify={notify} />; break;

@@ -42,14 +42,14 @@ export function ApplicationsPage({ applications, onSelect, onApply, calls, initi
   );
 }
 
-export function CallsPage({ calls, onApply, notify }) {
+export function CallsPage({ calls, onApply, notify, navigate }) {
   const [area, setArea] = useState('Vsa področja');
   const [selected, setSelected] = useState(null);
   const publishedCalls = calls.filter((call) => call.status !== 'Osnutek');
   const filtered = area === 'Vsa področja' ? publishedCalls : publishedCalls.filter((call) => call.area === area);
   return (
     <div className="page">
-      <PageHeader eyebrow="Javni razpisi" title="Priložnosti za vašo organizacijo" description="Preglejte odprte razpise, pogoje in razpisno dokumentacijo." />
+      <PageHeader eyebrow="Javni razpisi" title="Priložnosti za vašo organizacijo" description="Preglejte odprte razpise, pogoje in razpisno dokumentacijo." actions={<Button variant="secondary" icon={Archive} onClick={() => navigate('call-archive')}>Arhiv razpisov</Button>} />
       <div className="call-filter-row"><div className="filter-chips">{['Vsa področja', ...areas.slice(0, 5).map((item) => item.name)].map((name) => <button type="button" key={name} className={area === name ? 'active' : ''} onClick={() => setArea(name)}>{name}</button>)}</div><span>{filtered.length} razpisi</span></div>
       <div className="calls-grid">
         {filtered.map((call) => {

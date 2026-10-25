@@ -75,6 +75,45 @@ export const initialCalls = [
   },
 ];
 
+export const archivedCalls = [
+  {
+    id: 'sociala-2026', code: 'JR-SOCIALA-2026/01', title: 'Sofinanciranje socialnih programov 2026',
+    area: 'Sociala', year: 2026, published: '10. 8. 2026', deadline: '11. 9. 2026', completed: '22. 10. 2026',
+    budget: 160000, awarded: 154800, applications: 42, approved: 31, status: 'Zaključen',
+    description: 'Podpora programom socialnega vključevanja, medgeneracijskega sodelovanja in pomoči ranljivim skupinam v lokalni skupnosti.',
+  },
+  {
+    id: 'sport-2025', code: 'JR-ŠPORT-2025/01', title: 'Sofinanciranje programov športa 2025',
+    area: 'Šport', year: 2025, published: '3. 2. 2025', deadline: '14. 3. 2025', completed: '19. 12. 2025',
+    budget: 390000, awarded: 381600, applications: 132, approved: 116, status: 'Zaključen',
+    description: 'Sofinanciranje rednega delovanja športnih društev, programov mladih športnikov in lokalnih športnih prireditev.',
+  },
+  {
+    id: 'kultura-2025', code: 'JR-KULTURA-2025/02', title: 'Sofinanciranje programov kulture 2025',
+    area: 'Kultura', year: 2025, published: '17. 2. 2025', deadline: '28. 3. 2025', completed: '16. 12. 2025',
+    budget: 285000, awarded: 278400, applications: 88, approved: 64, status: 'Zaključen',
+    description: 'Podpora kulturnim programom, projektom in dejavnostim lokalnih kulturnih organizacij ter ustvarjalcev.',
+  },
+  {
+    id: 'mladina-2025', code: 'JR-MLADINA-2025/01', title: 'Programi za mlade v lokalni skupnosti 2025',
+    area: 'Mladina', year: 2025, published: '15. 1. 2025', deadline: '21. 2. 2025', completed: '28. 11. 2025',
+    budget: 75000, awarded: 75000, applications: 24, approved: 18, status: 'Zaključen',
+    description: 'Podpora mladinskim programom, participaciji mladih, prostovoljskemu delu in medgeneracijskim projektom.',
+  },
+  {
+    id: 'turizem-2024', code: 'JR-TURIZEM-2024/01', title: 'Razvoj turističnih doživetij 2024',
+    area: 'Turizem', year: 2024, published: '9. 9. 2024', deadline: '11. 10. 2024', completed: '13. 12. 2024',
+    budget: 100000, awarded: 92300, applications: 19, approved: 11, status: 'Zaključen',
+    description: 'Sofinanciranje inovativnih turističnih produktov, doživetij in povezovanja lokalnih ponudnikov.',
+  },
+  {
+    id: 'prireditve-2024', code: 'JR-PRIREDITVE-2024/03', title: 'Sofinanciranje lokalnih prireditev 2024',
+    area: 'Prireditve', year: 2024, published: '5. 2. 2024', deadline: '8. 3. 2024', completed: '22. 11. 2024',
+    budget: 60000, awarded: 58700, applications: 31, approved: 27, status: 'Zaključen',
+    description: 'Podpora kulturnim, športnim in drugim prireditvam, ki krepijo skupnost in prepoznavnost občine Medvode.',
+  },
+];
+
 export const initialApplications = [
   {
     id: 'JR-2026-0148',

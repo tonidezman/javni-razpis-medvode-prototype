@@ -30,6 +30,7 @@ npm run preview  # preview the production build
 
 - Dashboard with deadlines, tasks, applications, messages, and funding.
 - Public calls by content area, call conditions, and documentation.
+- Archive of completed calls with search, filters, outcomes, and downloadable documentation.
 - Four-step application: AJPES lookup, reuse of a previous application, program and finance data, attachments, review, simulated VSE signing, and ODOS receipt.
 - Application details and supplementation upload.
 - Payment requests with invoices and annual content/financial reports.
