@@ -23,6 +23,7 @@ export const areas = [
 export const initialCalls = [
   {
     id: 'sport-2026',
+    managerId: 1,
     code: 'JR-ŠPORT-2026/01',
     title: 'Sofinanciranje programov športa 2026',
     area: 'Šport',
@@ -36,6 +37,7 @@ export const initialCalls = [
   },
   {
     id: 'kultura-2026',
+    managerId: 1,
     code: 'JR-KULTURA-2026/02',
     title: 'Sofinanciranje programov kulture 2026',
     area: 'Kultura',
@@ -49,6 +51,7 @@ export const initialCalls = [
   },
   {
     id: 'turizem-2026',
+    managerId: 1,
     code: 'JR-TURIZEM-2026/01',
     title: 'Razvoj turističnih doživetij 2026',
     area: 'Turizem',

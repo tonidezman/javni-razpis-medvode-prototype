@@ -68,15 +68,41 @@ function Tasks({ role, navigate }) {
   );
 }
 
+function ManagedCallSwitcher({ calls, activeCall, onChange }) {
+  if (!activeCall) return null;
+  return (
+    <section className="managed-calls panel" aria-labelledby="managed-calls-title">
+      <div className="managed-calls__label">
+        <span className="managed-calls__icon"><Files size={18} /></span>
+        <div><strong id="managed-calls-title">Moji razpisi</strong><small>Maja Kovač · dodeljeni razpisi ({calls.length})</small></div>
+      </div>
+      <div className="managed-calls__options" role="group" aria-label="Izberite aktivni razpis">
+        {calls.map((call) => {
+          const area = areas.find((item) => item.name === call.area) || areas[0];
+          const active = call.id === activeCall.id;
+          return (
+            <button type="button" key={call.id} className={active ? 'active' : ''} aria-pressed={active} title={call.title} onClick={() => onChange(call.id)}>
+              <AreaIcon area={area} size="sm" />
+              <div><strong>{call.area}</strong><small>{call.status}</small></div>
+              {active && <CheckCircle2 size={15} />}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function ActiveCall({ role, call, navigate, startApplication }) {
   const isApplicant = role === 'applicant';
   const isAdministrator = role === 'administrator';
-  const actionIcon = isApplicant ? FilePlus2 : isAdministrator ? Files : ClipboardCheck;
-  const actionLabel = isApplicant ? 'Oddaj novo vlogo' : isAdministrator ? 'Upravljaj razpis' : 'Nadaljuj vrednotenje';
+  const isCallManager = role === 'admin' || isAdministrator;
+  const actionIcon = isApplicant ? FilePlus2 : isCallManager ? Files : ClipboardCheck;
+  const actionLabel = isApplicant ? 'Oddaj novo vlogo' : isCallManager ? 'Upravljaj razpis' : 'Nadaljuj vrednotenje';
   return (
     <section className="active-call">
       <div className="active-call__top">
-        <Badge tone={isApplicant || isAdministrator ? 'mint' : 'lavender'}>{isApplicant ? 'Odprt za oddajo' : isAdministrator ? 'Aktivni razpis' : 'Trenutna faza: vrednotenje'}</Badge>
+        <Badge tone={isApplicant || isCallManager ? 'mint' : 'lavender'}>{isApplicant ? 'Odprt za oddajo' : role === 'admin' ? call.status : isAdministrator ? 'Aktivni razpis' : 'Trenutna faza: vrednotenje'}</Badge>
         <span className="active-call__code">{call.code}</span>
       </div>
       <div className="active-call__body">
@@ -90,10 +116,10 @@ function ActiveCall({ role, call, navigate, startApplication }) {
       </div>
       <div className="active-call__footer">
         <div className="deadline-visual">
-          <strong>{isApplicant ? '25' : '68'}</strong>
-          <span>{isApplicant ? 'dni do roka' : '% ocenjenih programov'}</span>
+          <strong>{isApplicant ? '25' : role === 'admin' ? `${call.phase}/7` : '68'}</strong>
+          <span>{isApplicant ? 'dni do roka' : role === 'admin' ? 'trenutna faza razpisa' : '% ocenjenih programov'}</span>
         </div>
-        <Button variant="light" icon={actionIcon} onClick={() => isApplicant ? startApplication(call) : navigate(isAdministrator ? 'admin-calls' : 'scoring')}>
+        <Button variant="light" icon={actionIcon} onClick={() => isApplicant ? startApplication(call) : navigate(isCallManager ? 'admin-calls' : 'scoring')}>
           {actionLabel}
         </Button>
       </div>
@@ -101,10 +127,10 @@ function ActiveCall({ role, call, navigate, startApplication }) {
   );
 }
 
-export function DashboardA({ role, applications, calls, navigate, startApplication, selectApplication }) {
+export function DashboardA({ role, applications, calls, activeManagedCall, onManagedCallChange, navigate, startApplication, selectApplication }) {
   const mine = role === 'applicant';
   const visible = (mine ? applications.filter((item) => item.mine) : applications).slice(0, 4);
-  const call = calls.find((item) => item.id === (mine ? 'sport-2026' : 'kultura-2026')) || calls[0];
+  const call = activeManagedCall || calls.find((item) => item.id === (mine ? 'sport-2026' : 'kultura-2026')) || calls[0];
   const statsByRole = {
     applicant: [
       { label: 'Aktivne vloge', value: '2', note: '1 zahteva dopolnitev', icon: Files, tone: 'green' },
@@ -157,6 +183,7 @@ export function DashboardA({ role, applications, calls, navigate, startApplicati
           </article>
         ))}
       </div>
+      {role === 'admin' && <ManagedCallSwitcher calls={calls} activeCall={activeManagedCall} onChange={onManagedCallChange} />}
       <div className="dashboard-a__spotlight">
         <ActiveCall role={role} call={call} navigate={navigate} startApplication={startApplication} />
         <section className="panel task-panel">
@@ -173,11 +200,11 @@ export function DashboardA({ role, applications, calls, navigate, startApplicati
   );
 }
 
-export function DashboardB({ role, applications, calls, navigate, startApplication, selectApplication }) {
+export function DashboardB({ role, applications, calls, activeManagedCall, onManagedCallChange, navigate, startApplication, selectApplication }) {
   const mine = role === 'applicant';
   const visible = (mine ? applications.filter((item) => item.mine) : applications).slice(0, 5);
-  const call = calls.find((item) => item.id === (mine ? 'sport-2026' : 'kultura-2026')) || calls[0];
-  const activePhase = mine ? 1 : 5;
+  const call = activeManagedCall || calls.find((item) => item.id === (mine ? 'sport-2026' : 'kultura-2026')) || calls[0];
+  const activePhase = mine ? 1 : role === 'admin' ? call.phase : 5;
   const header = {
     applicant: { eyebrow: 'Vlagateljski portal', title: 'Vaš razpis, korak za korakom.', description: 'Spremljajte potek vloge in dokončajte odprte naloge na enem mestu.', action: 'Vprašaj skrbnika', page: 'messages', icon: MessageSquareText },
     admin: { eyebrow: 'Skrbniško delovno mesto', title: 'Od prejete vloge do realizacije.', description: 'Procesni pregled aktivnega razpisa in naloge po posameznih fazah.', action: 'Podpora uporabnikom', page: 'support', icon: MessageSquareText },
@@ -198,6 +225,7 @@ export function DashboardB({ role, applications, calls, navigate, startApplicati
         description={header.description}
         actions={<Button variant="secondary" icon={header.icon} onClick={() => navigate(header.page)}>{header.action}</Button>}
       />
+      {role === 'admin' && <ManagedCallSwitcher calls={calls} activeCall={activeManagedCall} onChange={onManagedCallChange} />}
       <section className="workflow-panel">
         <div className="workflow-panel__heading">
           <div><Badge tone="green">{call.code}</Badge><h2>{call.title}</h2></div>
@@ -269,7 +297,7 @@ export function DashboardC({ role, applications, calls, navigate, startApplicati
       ['Odprti obveznosti', '2', '1 dopolnitev · 1 poročilo'],
     ],
     admin: [
-      ['Vse prejete vloge', '327', '9 področij · 4 aktivni razpisi'],
+      ['Vse prejete vloge', '327', `Dodeljeni razpisi: ${calls.length}`],
       ['Skupaj zahtevana sredstva', '2,46 mio €', '141 % razpoložljivega okvira'],
       ['Razporejena sredstva', '1,28 mio €', '74 % letnega proračuna'],
       ['Povprečen čas pregleda', '3,2 dni', 'Cilj: največ 5 delovnih dni'],

@@ -70,7 +70,7 @@ const navigationByRole = {
 
 const roleProfiles = {
   applicant: { label: 'Vlagatelj', context: 'Vlagateljski portal', organization: 'Športno društvo Sora', name: 'Ana Novak', subtitle: 'Vlagateljica', icon: UserRound },
-  admin: { label: 'Skrbnik', context: 'Upravljanje razpisov', organization: 'Občina Medvode', name: 'Maja Kovač', subtitle: 'Skrbnica razpisov', icon: ShieldCheck },
+  admin: { label: 'Skrbnik', context: 'Upravljanje razpisov', organization: 'Občina Medvode', name: 'Maja Kovač', subtitle: 'Skrbnica razpisov', icon: ShieldCheck, userId: 1 },
   commission: { label: 'Komisija', context: 'Delovno mesto komisije', organization: 'Komisija za kulturo 2026', name: 'Peter Kralj', subtitle: 'Član komisije', icon: UsersRound },
   administrator: { label: 'Administrator', context: 'Sistemska administracija', organization: 'Občina Medvode', name: 'Marko Lesjak', subtitle: 'Sistemski administrator', icon: Settings2 },
 };
@@ -101,6 +101,7 @@ export default function App() {
   const toastTimer = useRef(null);
   const [applications, setApplications] = useState(initialApplications);
   const [calls, setCalls] = useState(initialCalls);
+  const [activeManagedCallId, setActiveManagedCallId] = useState('kultura-2026');
   const [documents, setDocuments] = useState(initialDocuments);
   const [requests, setRequests] = useState(initialRequests);
   const [users, setUsers] = useState(initialUsers);
@@ -112,6 +113,8 @@ export default function App() {
   const navItems = navigationByRole[role];
   const profile = roleProfiles[role];
   const primaryNotification = primaryNotifications[role];
+  const visibleCalls = role === 'admin' ? calls.filter((call) => call.managerId === profile.userId) : calls;
+  const activeManagedCall = role === 'admin' ? visibleCalls.find((call) => call.id === activeManagedCallId) || visibleCalls[0] : null;
   const applicationListPage = role === 'applicant' ? 'applications' : role === 'commission' ? 'commission-applications' : 'admin-applications';
 
   const notify = useCallback((message) => {
@@ -194,7 +197,7 @@ export default function App() {
     setSearchQuery(globalSearch);
   };
 
-  const dashboardProps = { role, applications, calls, navigate, startApplication, selectApplication: (item) => setSelectedApplicationId(item.id) };
+  const dashboardProps = { role, applications, calls: visibleCalls, activeManagedCall, onManagedCallChange: setActiveManagedCallId, navigate, startApplication, selectApplication: (item) => setSelectedApplicationId(item.id) };
   const Dashboard = variant === 'B' ? DashboardB : variant === 'C' ? DashboardC : DashboardA;
 
   let content;
@@ -207,7 +210,7 @@ export default function App() {
     case 'documents': content = <DocumentsPage role={role} documents={documents} setDocuments={setDocuments} notify={notify} />; break;
     case 'messages': content = <MessagesPage notify={notify} />; break;
     case 'support': content = <SupportPage role={role} notify={notify} />; break;
-    case 'admin-calls': content = <AdminCallsPage role={role} calls={calls} setCalls={setCalls} notify={notify} navigate={navigate} />; break;
+    case 'admin-calls': content = <AdminCallsPage role={role} calls={visibleCalls} setCalls={setCalls} managerId={role === 'admin' ? profile.userId : null} notify={notify} navigate={navigate} />; break;
     case 'admin-applications': content = <AdminApplicationsPage applications={applications} onSelect={(item) => setSelectedApplicationId(item.id)} notify={notify} initialQuery={searchQuery} />; break;
     case 'commission-applications': content = <CommissionApplicationsPage applications={applications} onSelect={(item) => setSelectedApplicationId(item.id)} navigate={navigate} initialQuery={searchQuery} />; break;
     case 'scoring': content = <ScoringPage setApplications={setApplications} notify={notify} />; break;
