@@ -330,7 +330,19 @@ body { color: var(--medvode-ink); background: var(--canvas); }
 .registry-checks p strong { color: #3e6b84; }
 .document-valid { color: #237158; }
 
+.commission-summary svg { color: #266aab; }
+.commission-notice { color: #466d88; background: #edf6fc; border-color: #d5e7f2; }
+.role-switch button { flex: 0 0 auto; }
+
+@media (max-width: 900px) {
+  .role-switch button { padding-left: 8px; padding-right: 8px; }
+  .role-switch button svg { display: none; }
+  .global-search { min-width: 180px; }
+}
+
 @media (max-width: 760px) {
   .scoring-programs > button.active { border-color: #74c1e0; box-shadow: none; }
   .flow-mobile-progress { color: #266aab; }
+  .role-switch { max-width: calc(100vw - 100px); overflow-x: auto; scrollbar-width: none; }
+  .role-switch::-webkit-scrollbar { display: none; }
 }

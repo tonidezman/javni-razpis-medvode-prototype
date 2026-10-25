@@ -218,7 +218,7 @@ export const initialUsers = [
   { id: 2, name: 'Ana Novak', email: 'ana.novak@sd-sora.si', role: 'Vlagatelj', organization: 'Športno društvo Sora', active: true, last: 'Danes, 08:42' },
   { id: 3, name: 'Peter Kralj', email: 'peter.kralj@medvode.si', role: 'Član komisije', organization: 'Občina Medvode', active: true, last: 'Včeraj, 14:26' },
   { id: 4, name: 'Nina Zupan', email: 'nina.zupan@kud-medvode.si', role: 'Vlagatelj', organization: 'KUD Medvode', active: true, last: '21. 10. 2026' },
-  { id: 5, name: 'Marko Lesjak', email: 'marko.lesjak@medvode.si', role: 'Pregledovalec', organization: 'Občina Medvode', active: false, last: '2. 9. 2026' },
+  { id: 5, name: 'Marko Lesjak', email: 'marko.lesjak@medvode.si', role: 'Administrator', organization: 'Občina Medvode', active: true, last: 'Danes, 08:55' },
 ];
 
 export const criteria = [
